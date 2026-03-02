@@ -53,6 +53,11 @@ output "confluent_environment_id" {
   value       = confluent_environment.non_prod.id
 } 
 
+output "confluent_gateway_id" {
+  description = "Confluent Cloud Gateway ID"
+  value       = confluent_gateway.non_prod.id
+}
+
 output "confluent_sandbox_kafka_cluster_id" {
   description = "Confluent Cloud Sandbox Kafka Cluster ID"
   value       = confluent_kafka_cluster.sandbox_cluster.id
@@ -80,10 +85,11 @@ output "deploy_script_arguments" {
     iac-cc-app_resources-example deploy.sh argument with values
     =======================================================================================
       --confluent-environment-id=${confluent_environment.non_prod.id} \
+      --confluent-gateway-id=${confluent_gateway.non_prod.id} \
       --confluent-sandbox-kafka-cluster-id=${confluent_kafka_cluster.sandbox_cluster.id} \
       --confluent-shared-kafka-cluster-id=${confluent_kafka_cluster.shared_cluster.id} \
       --confluent-sandbox-access-code-id=${module.sandbox_access_point.access_point_id} \
-      --confluent-shared-access-code-id=${module.shared_access_point.access_point_id}
+      --confluent-shared-access-code-id=${module.shared_access_point.access_point_id} \
     =======================================================================================
   EOT
 }
