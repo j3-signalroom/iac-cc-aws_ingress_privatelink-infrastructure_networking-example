@@ -40,7 +40,7 @@ resource "confluent_environment" "non_prod" {
 # your Kafka clusters (i.e., abstracting away complex broker lists, inconsistent security settings,
 # and the operational overhead of managing direct client-to-cluster connections).
 resource "confluent_gateway" "non_prod" {
-  display_name = "${confluent_environment.non_prod.display_name}-privatelink-gateway"
+  display_name = "${confluent_environment.non_prod.display_name}-ingress-privatelink-gateway"
 
   environment {
     id = confluent_environment.non_prod.id
