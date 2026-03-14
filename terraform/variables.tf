@@ -66,13 +66,6 @@ variable "number_of_api_keys_to_retain" {
 # ===================================================
 # TERRAFORM CONFIGURATION
 # ===================================================
-variable "tfe_token" {
-  description = "Terraform Cloud API Token"
-  type        = string
-  sensitive   = true
-  default     = ""
-}
-
 variable "tfc_agent_vpc_id" {
   description = "Terraform Cloud Agent VPC ID (for tagging PHZ association purposes)"
   type        = string
@@ -134,19 +127,5 @@ variable "vpn_target_subnet_ids" {
 
 variable "confluent_glb_resolver_rule_id" {
   description = "Confluent GLB Resolver Rule ID for adding rules to PrivateLink VPCs"
-  type        = string
-}
-
-# ===================================================
-# AWS KMS BYOK CONFIGURATION
-# ===================================================
-variable "aws_kms_key_arn" {
-  description = "Optional existing AWS KMS key ARN for Confluent Cloud BYOK encryption. If not provided, a new KMS key will be created."
-  type        = string
-  default     = ""
-}
-
-variable "confluent_byok_account_id" {
-  description = "The Confluent Cloud AWS account ID that will be granted access to use the KMS key for BYOK encryption."
   type        = string
 }

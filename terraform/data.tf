@@ -24,6 +24,4 @@ locals {
 
   sandbox_vpc_name      = "sandbox-${confluent_environment.non_prod.display_name}"
   shared_vpc_name       = "shared-${confluent_environment.non_prod.display_name}"
-
-  kms_key_arn           = var.aws_kms_key_arn != "" ? var.aws_kms_key_arn : aws_kms_key.byok[0].arn
 }
