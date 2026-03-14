@@ -16,78 +16,7 @@ terraform {
             source  = "confluentinc/confluent"
             version = "2.63.0"
         }
-        tfe = {
-            source = "hashicorp/tfe"
-            version = "~> 0.73.0"
-        }
     }
-}
-
-# ===================================================================================
-# AWS KMS BYOK ENCRYPTION CONFIGURATION
-# ===================================================================================
-data "aws_caller_identity" "current" {}
-
-data "aws_iam_policy_document" "byok_key_policy" {
-  # Allow the AWS account root full access to manage the KMS key
-  statement {
-    sid    = "EnableRootAccountPermissions"
-    effect = "Allow"
-
-    principals {
-      type        = "AWS"
-      identifiers = ["arn:aws:iam::${data.aws_caller_identity.current.account_id}:root"]
-    }
-
-    actions   = ["kms:*"]
-    resources = ["*"]
-  }
-
-  # Grant Confluent Cloud the minimum permissions needed for BYOK encryption
-  statement {
-    sid    = "AllowConfluentCloudBYOKAccess"
-    effect = "Allow"
-
-    principals {
-      type        = "AWS"
-      identifiers = ["arn:aws:iam::${var.confluent_byok_account_id}:root"]
-    }
-
-    actions = [
-      "kms:Encrypt",
-      "kms:Decrypt",
-      "kms:ReEncrypt*",
-      "kms:GenerateDataKey*",
-      "kms:DescribeKey",
-      "kms:CreateGrant",
-      "kms:ListGrants",
-      "kms:RevokeGrant",
-    ]
-
-    resources = ["*"]
-  }
-}
-
-resource "aws_kms_key" "byok" {
-  count = var.aws_kms_key_arn == "" ? 1 : 0
-
-  description             = "KMS key for Confluent Cloud Kafka BYOK encryption in ${var.aws_region}"
-  deletion_window_in_days = 14
-  enable_key_rotation     = true
-  policy                  = data.aws_iam_policy_document.byok_key_policy.json
-}
-
-resource "aws_kms_alias" "byok" {
-  count = var.aws_kms_key_arn == "" ? 1 : 0
-
-  name          = "alias/confluent-cloud-byok"
-  target_key_id = aws_kms_key.byok[0].key_id
-}
-
-resource "confluent_byok_key" "aws" {
-  aws {
-    key_arn = local.kms_key_arn
-  }
 }
 
 # ===================================================================================
@@ -198,10 +127,6 @@ resource "confluent_kafka_cluster" "sandbox_cluster" {
     id = confluent_environment.non_prod.id
   }
 
-  byok_key {
-    id = confluent_byok_key.aws.id
-  }
-
   depends_on = [
     module.sandbox_access_point
   ]
@@ -294,10 +219,6 @@ resource "confluent_kafka_cluster" "shared_cluster" {
 
   environment {
     id = confluent_environment.non_prod.id
-  }
-
-  byok_key {
-    id = confluent_byok_key.aws.id
   }
 
   depends_on = [

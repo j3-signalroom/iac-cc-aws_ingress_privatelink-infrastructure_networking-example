@@ -609,7 +609,6 @@ The deploy.sh script handles authentication and Terraform execution:
 ./deploy.sh create --profile=<SSO_PROFILE_NAME> \
                    --confluent-api-key=<CONFLUENT_API_KEY> \
                    --confluent-api-secret=<CONFLUENT_API_SECRET> \
-                   --tfe-token=<TFE_TOKEN> \
                    --tgw-id=<TGW_ID> \
                    --tgw-rt-id=<TGW_RT_ID> \
                    --tfc-agent-vpc-id=<TFC_AGENT_VPC_ID> \
@@ -630,7 +629,6 @@ Here's the argument table for `deploy.sh create` command:
 | `--profile` | ✅ | The AWS SSO profile name. Passed directly to `aws sso login` and `aws2-wrap` for authentication, and used to resolve `AWS_REGION`, `AWS_ACCESS_KEY_ID`, `AWS_SECRET_ACCESS_KEY`, and `AWS_SESSION_TOKEN`, which are then exported as `TF_VAR_aws_region`, `TF_VAR_aws_access_key_id`, `TF_VAR_aws_secret_access_key`, and `TF_VAR_aws_session_token` for Terraform, respectively. |
 | `--confluent-api-key` | ✅ | Confluent Cloud API key. Exported as `TF_VAR_confluent_api_key` for Terraform. |
 | `--confluent-api-secret` | ✅ | Confluent Cloud API secret. Exported as `TF_VAR_confluent_api_secret` for Terraform. |
-| `--tfe-token` | ✅ | Terraform Enterprise/Cloud API token. Exported as `TF_VAR_tfe_token` — used for authenticating the TFC Agent or remote backend. |
 | `--tgw-id` | ✅ | AWS Transit Gateway ID. Exported as `TF_VAR_tgw_id` for routing between VPCs. |
 | `--tgw-rt-id` | ✅ | AWS Transit Gateway Route Table ID. Exported as `TF_VAR_tgw_rt_id` for associating route entries. |
 | `--tfc-agent-vpc-id` | ✅ | VPC ID where the Terraform Cloud Agent resides. Exported as `TF_VAR_tfc_agent_vpc_id`. |
@@ -643,14 +641,13 @@ Here's the argument table for `deploy.sh create` command:
 | `--vpn-target-subnet-ids` | ✅ | Subnet IDs associated with the VPN endpoint target network. Exported as `TF_VAR_vpn_target_subnet_ids`. |
 | `--confluent-glb-resolver-rule-id` | ✅ | The ID of the SYSTEM resolver rule in Route 53 that ensures Confluent domain queries are resolved locally within AWS and not forwarded to external DNS servers. Exported as `TF_VAR_confluent_glb_resolver_rule_id`. |
 
-> All 15 arguments are required — the script exits with code `85` if any are missing.
+> All 14 arguments are required — the script exits with code `85` if any are missing.
 
 ### **3.2 Teardown the Infrastructure**
 ```bash
 ./deploy.sh destroy --profile=<SSO_PROFILE_NAME> \
                     --confluent-api-key=<CONFLUENT_API_KEY> \
                     --confluent-api-secret=<CONFLUENT_API_SECRET> \
-                    --tfe-token=<TFE_TOKEN> \
                     --tgw-id=<TGW_ID> \
                     --tgw-rt-id=<TGW_RT_ID> \
                     --tfc-agent-vpc-id=<TFC_AGENT_VPC_ID> \
@@ -671,7 +668,6 @@ Here's the argument table for `deploy.sh destroy` command:
 | `--profile` | ✅ | The AWS SSO profile name. Passed directly to `aws sso login` and `aws2-wrap` for authentication, and used to resolve `AWS_REGION`, `AWS_ACCESS_KEY_ID`, `AWS_SECRET_ACCESS_KEY`, and `AWS_SESSION_TOKEN`, which are then exported as `TF_VAR_aws_region`, `TF_VAR_aws_access_key_id`, `TF_VAR_aws_secret_access_key`, and `TF_VAR_aws_session_token` for Terraform, respectively. |
 | `--confluent-api-key` | ✅ | Confluent Cloud API key. Exported as `TF_VAR_confluent_api_key` for Terraform. |
 | `--confluent-api-secret` | ✅ | Confluent Cloud API secret. Exported as `TF_VAR_confluent_api_secret` for Terraform. |
-| `--tfe-token` | ✅ | Terraform Enterprise/Cloud API token. Exported as `TF_VAR_tfe_token` — used for authenticating the TFC Agent or remote backend. |
 | `--tgw-id` | ✅ | AWS Transit Gateway ID. Exported as `TF_VAR_tgw_id` for routing between VPCs. |
 | `--tgw-rt-id` | ✅ | AWS Transit Gateway Route Table ID. Exported as `TF_VAR_tgw_rt_id` for associating route entries. |
 | `--tfc-agent-vpc-id` | ✅ | VPC ID where the Terraform Cloud Agent resides. Exported as `TF_VAR_tfc_agent_vpc_id`. |
@@ -684,7 +680,7 @@ Here's the argument table for `deploy.sh destroy` command:
 | `--vpn-target-subnet-ids` | ✅ | Subnet IDs associated with the VPN endpoint target network. Exported as `TF_VAR_vpn_target_subnet_ids`. |
 | `--confluent-glb-resolver-rule-id` | ✅ | The ID of the SYSTEM resolver rule in Route 53 that ensures Confluent domain queries are resolved locally within AWS and not forwarded to external DNS servers. Exported as `TF_VAR_confluent_glb_resolver_rule_id`. |
 
-> All 15 arguments are required — the script exits with code `85` if any are missing.
+> All 14 arguments are required — the script exits with code `85` if any are missing.
 
 ## **4.0 Resources**
 
